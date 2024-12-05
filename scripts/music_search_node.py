@@ -7,7 +7,7 @@ from selenium import webdriver # type: ignore
 from selenium.webdriver.common.by import By # type: ignore
 from selenium.webdriver.chrome.service import Service # type: ignore
 from selenium.webdriver.chrome.options import Options # type: ignore
-from webdriver_manager.chrome import ChromeDriverManager # type: ignore # For auto-managing ChromeDriver
+from webdriver_manager.chrome import ChromeDriverManager # type: ignore
 from selenium.webdriver.support.ui import WebDriverWait # type: ignore
 from selenium.webdriver.support import expected_conditions as EC # type: ignore
 import time
@@ -17,8 +17,8 @@ class MusicSearchNode:
         rospy.init_node('music_search_node', anonymous=True)
         self.search_query_pub = rospy.Publisher('music_search_query', String, queue_size=10)
         rospy.loginfo("Music Search Node is ready. Waiting for song requests...")
-        self.browser_active = False  # State to track browser activity
-        self.driver = None  # Selenium WebDriver instance
+        self.browser_active = False 
+        self.driver = None  
         self.subscribe_to_topics()
 
     def subscribe_to_topics(self):
@@ -49,7 +49,6 @@ class MusicSearchNode:
         search_url = f"https://www.youtube.com/results?search_query={query.replace(' ', '+')}"
         rospy.loginfo(f"Generated search URL: {search_url}")
 
-        # Start a new thread to open the browser
         threading.Thread(target=self.open_browser, args=(search_url,)).start()
 
     def open_browser(self, search_url):
@@ -59,21 +58,14 @@ class MusicSearchNode:
             chrome_options.add_argument("--no-sandbox")
             chrome_options.add_argument("--disable-dev-shm-usage")
             chrome_options.add_argument("--start-maximized")
-            # chrome_options.add_argument("--headless")  # Uncomment for headless mode
             chrome_options.add_argument("--disable-gpu")
-
-            # Setup ChromeDriver via WebDriverManager
             self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
             self.browser_active = True
             self.driver.get(search_url)
             rospy.loginfo("Opened the YouTube search page.")
-
-            # Automatically click the first video link
             first_video = self.driver.find_element(By.CSS_SELECTOR, "a.yt-simple-endpoint.style-scope.ytd-video-renderer")
             first_video.click()
             rospy.loginfo("Playing the first video.")
-
-            # Start threads for ad skipping and monitoring video playback
             threading.Thread(target=self.skip_ads_loop).start()
             threading.Thread(target=self.monitor_video_end).start()
 
@@ -106,7 +98,7 @@ class MusicSearchNode:
                 rospy.logwarn(f"Failed to close the browser: {e}")
             finally:
                 self.driver = None
-                self.browser_active = False  # Allow re-subscription
+                self.browser_active = False
 
     def handle_video_control(self, msg):
         if not self.driver:
