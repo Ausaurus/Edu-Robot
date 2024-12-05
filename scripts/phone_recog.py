@@ -63,7 +63,6 @@ def reset_timer(event):
     timer_active = False
 
 if __name__ == "__main__":   
-    logging.getLogger().setLevel(logging.WARNING)  # Suppress info/debug messages
     rospy.init_node('Phone_recog_node')
     rospy.Subscriber('camera_image', Image, image_callback)
     rospy.spin()
