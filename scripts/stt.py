@@ -4,13 +4,11 @@ from std_msgs.msg import String
 import speech_recognition as sr #type: ignore
 import os
 
-# Initialize ROS node
 rospy.init_node('stt', anonymous=True)
 recognizer = sr.Recognizer()
 song_name_publisher = rospy.Publisher('song_name', String, queue_size=10)
 
 def convert_audio_to_text(file_path):
-    """Converts a WAV file to text using speech recognition."""
     try:
         file = file_path.data
         with sr.AudioFile(file) as source:
@@ -22,7 +20,6 @@ def convert_audio_to_text(file_path):
         return None
 
 def get_song_name(file_path):
-    """Converts a WAV file to text using speech recognition."""
     try:
         file = file_path.data
         with sr.AudioFile(file) as source:
