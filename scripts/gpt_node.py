@@ -3,11 +3,9 @@ import rospy
 from groq import Groq # type: ignore
 from std_msgs.msg import String
 
-# Initialize Groq client with API key
 client = Groq(api_key='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')
 
 def get_gpt_response(question):
-    # Generate response using the Groq client
     completion = client.chat.completions.create(
         model="llama3-8b-8192",
         messages=[{"role": "user", "content": question}],
@@ -17,7 +15,6 @@ def get_gpt_response(question):
         stream=True,
     )
     
-    # Concatenate chunks into a full response
     response = ""
     for chunk in completion:
         content = chunk.choices[0].delta.content
@@ -32,7 +29,6 @@ def callback(data):
     rospy.loginfo(f"LLM Response: {answer}")
         
     
-    # Publish the response to the TTS node
     pub.publish(answer)
 
 if __name__ == '__main__':
