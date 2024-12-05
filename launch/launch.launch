@@ -1,0 +1,14 @@
+<launch>
+  <node pkg="edu_robot_pkg" type="record_and_publish_node.py" name="record_and_publish" output="screen"/>
+  <node pkg="edu_robot_pkg" type="stt.py" name="stt" output="screen"/>
+  <node pkg="edu_robot_pkg" type="gpt_node.py" name="gpt_node" output="screen"/>
+  <node pkg="edu_robot_pkg" type="tts_node.py" name="tts_node" output="screen"/>
+  <node pkg="edu_robot_pkg" type="music_search_node.py" name="music_search_node" output="screen"/>
+  <node pkg="sound_play" type="soundplay_node.py" name="soundplay_node" output="screen"/>
+  <node pkg="edu_robot_pkg" type="porodomo.py" name="porodomo_timer" output="screen"/>
+  <node pkg="edu_robot_pkg" type="initiate.py" name="initiate" output="screen"/>
+  <node pkg="edu_robot_pkg" type="phone_recog.py" name="phone_recog" output="screen"/>
+  <node pkg="edu_robot_pkg" type="camera_node.py" name="camera_node" output="screen"/>
+  <node pkg="edu_robot_pkg" type="gesture_node.py" name="gesture_node" output="screen"/>
+  <node pkg="edu_robot_pkg" type="get_song_name.py" name="get_song_name" output="screen"/>
+</launch>
