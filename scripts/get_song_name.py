@@ -6,34 +6,28 @@ import wave
 import threading
 from sound_play.libsoundplay import SoundClient
 
-# Audio configuration
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 16000
 CHUNK = 1024
 
-# Global flag to control recording
 stop_recording = False
 recording_prompt = False
 last_time = 0
 
-# Initialize PyAudio
 audio = pyaudio.PyAudio()
 
-# Initialize speech
 speech = SoundClient()
 
-# Function to record audio
 def record_audio():
     global stop_recording
     frames = []
 
     print("Recording... Press 's' again to stop.")
 
-    # Open audio stream
     stream = audio.open(format=pyaudio.paInt16,
-                    channels=1,             # Mono
-                    rate=16000,            # Supported sample rate
+                    channels=1,            
+                    rate=16000,           
                     input=True,
                     frames_per_buffer=1024)
 
@@ -47,7 +41,6 @@ def record_audio():
 
     return frames
 
-# Function to save audio to a file
 def save_audio(frames, filename):
     wf = wave.open(filename, 'wb')
     wf.setnchannels(CHANNELS)
@@ -56,7 +49,6 @@ def save_audio(frames, filename):
     wf.writeframes(b''.join(frames))
     wf.close()
 
-# Thread to listen for the stop key
 def monitor_keyboard():
     global stop_recording
     stop_recording = True
@@ -70,7 +62,6 @@ def recording_stop(msg):
     global stop_recording
     stop_recording = True
     
-# ROS Node and publisher setup
 def audio_publisher(msg):
     global recording_prompt
     global stop_recording
@@ -80,15 +71,9 @@ def audio_publisher(msg):
         print('start recording song name')
         stop_recording = False
         recording_prompt = False
-        # Start a thread to monitor keyboard input for stopping
-        # Record audio
         frames = record_audio()
-
-        # Save audio to file
         save_audio(frames, audio_file_path)
         print(f"Audio saved as {audio_file_path}")
-
-        # Publish the file path
         pub.publish(audio_file_path)
         rospy.loginfo(f"Published new audio file path: {audio_file_path}")
         last_time = rospy.get_time()
@@ -104,6 +89,5 @@ if __name__ == '__main__':
     except rospy.ROSInterruptException:
         pass
     finally:
-        # Terminate PyAudio
         audio.terminate()
 
