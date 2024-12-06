@@ -39,7 +39,6 @@ def record_audio_vad():
 
     print("Recording... Speak to start and stop recording automatically.")
 
-    # Open audio stream
     stream = audio.open(format=FORMAT,
                         channels=CHANNELS,
                         rate=RATE,
@@ -113,8 +112,8 @@ if __name__ == '__main__':
         rospy.init_node('audio_publisher')
         rospy.Subscriber('recording_start', String, recording)
         rospy.Subscriber('initiate', String, audio_publisher)
-        rospy.Subscriber('ini_music', String, music_recording_ini) # check if user wants to find music 
-        rospy.Subscriber('/song_topic', String, music_recording_deact) # check if user has finished finding music
+        rospy.Subscriber('ini_music', String, music_recording_ini) 
+        rospy.Subscriber('/song_topic', String, music_recording_deact) 
         rospy.spin()
     except rospy.ROSInterruptException:
         pass

@@ -20,28 +20,22 @@ double_check = False
 timer_active = False
 
 def put_the_phone_down(data):
-    # Audio configuration
     CHUNK = 1024
-    # Initialize PyAudio
     audio = pyaudio.PyAudio()
     f = wave.open(r"/home/manfred/catkin_ws/src/edu_robot_pkg/audio/PUT THE PHONE DOWN.wav","rb")
     stream = audio.open(format = audio.get_format_from_width(f.getsampwidth()),  
                 channels = f.getnchannels(),  
                 rate = f.getframerate(),  
                 output = True)  
-    #read data  
     data = f.readframes(CHUNK)  
-    
-    #play stream  
+
     while data:  
         stream.write(data)  
         data = f.readframes(CHUNK)  
     
-    #stop stream  
     stream.stop_stream()  
     stream.close()  
-    
-    #close PyAudio  
+      
     audio.terminate()
 
 def phone_detection(frame):

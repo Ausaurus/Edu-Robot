@@ -5,18 +5,15 @@ import pyaudio #type: ignore
 import wave
 import webrtcvad #type: ignore
 
-# Audio configuration
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 48000
 CHUNK = 480
 
-# Global flag to control recording
 stop_recording = False
 recording_prompt = False
 last_time = 0
 
-# Initialize PyAudio
 audio = pyaudio.PyAudio()
 vad = webrtcvad.Vad()
 vad.set_mode(3)
@@ -31,7 +28,6 @@ def is_speech(data):
 
     return vad.is_speech(data[:frame_bytes], RATE)
 
-# Function to record audio
 def record_audio():
     global stop_recording
     frames = []
@@ -40,7 +36,6 @@ def record_audio():
 
     print("Recording... Speak to start and stop recording automatically.")
 
-    # Open audio stream
     stream = audio.open(format=FORMAT,
                         channels=CHANNELS,
                         rate=RATE,
@@ -68,7 +63,6 @@ def record_audio():
 
     return frames
 
-# Function to save audio to a file
 def save_audio(frames, filename):
     wf = wave.open(filename, 'wb')
     wf.setnchannels(CHANNELS)
@@ -77,7 +71,6 @@ def save_audio(frames, filename):
     wf.writeframes(b''.join(frames))
     wf.close()
 
-# Thread to listen for the stop key
 def monitor_keyboard():
     global stop_recording
     stop_recording = True
@@ -113,6 +106,5 @@ if __name__ == '__main__':
     except rospy.ROSInterruptException:
         pass
     finally:
-        # Terminate PyAudio
         audio.terminate()
 
